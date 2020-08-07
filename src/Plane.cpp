@@ -25,6 +25,9 @@ Plane::Plane()
 	m_buildAnimations();
 
 	m_angle = 0.0f;
+
+	m_playerDetected = false;
+	m_haveLOS = false;
 }
 
 Plane::~Plane()
@@ -64,4 +67,33 @@ void Plane::m_buildAnimations()
 	planeAnimation.frames.push_back(getSpriteSheet()->getFrame("plane3"));
 
 	setAnimation(planeAnimation);
+}
+
+void Plane::m_checkCurrentConditions()
+{
+	if (m_health >= 25)
+	{
+		if (m_playerDetected)
+		{
+			if (m_haveLOS)
+			{
+				if (m_withinMeleeRange)
+				{
+					m_stateMachine.setInnerState(MELEE_ATTACK);
+				}
+				else
+				{
+					m_stateMachine.setInnerState(MOVE_TO_MEELE);
+				}
+			}
+			else
+			{
+				m_stateMachine.setInnerState(MOVE_TO_LOS);
+			}
+		}
+	}
+	else
+	{
+		m_stateMachine.setOuterState(FLIIGHT);
+	}
 }
