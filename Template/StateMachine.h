@@ -12,7 +12,8 @@ public:
 	void Update();
 private:
 
-	BehaviourState m_currentState;
+	BehaviourState m_currentOuterState;
+	BehaviourState m_currentInnerState;
 
 };
 
